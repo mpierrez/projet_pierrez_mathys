@@ -1,0 +1,38 @@
+<app-header/>
+
+<div class="store-title">
+  <h1>Bienvenue <span>{{ (user$ | async)?.firstname }} {{ (user$ | async)?.lastname }}</span> sur Caakle</h1>
+</div>
+
+<div class="product-list container">
+  <div class="row g-4">
+    <div class="col-md-4 col-sm-6" *ngFor="let cake of cakes$ | async">
+      <div class="card h-100 shadow-sm">
+        <img
+          [src]="cake.imageUrl"
+          alt="{{ cake.name }}"
+          class="card-img-top"
+          style="height: 200px; object-fit: cover;"
+        />
+
+        <div class="card-body">
+          <h5 class="card-title text-truncate">{{ cake.name }}</h5>
+          <p class="card-text small text-muted">{{ cake.type }}</p>
+          <p class="card-text">
+            <strong>Prix:</strong> {{ cake.price | numberFormat }} €<br>
+            <strong>Poids:</strong> {{ cake.weight }} g
+          </p>
+          <p class="card-text text-truncate" title="{{ cake.description }}">
+            {{ cake.description }}
+          </p>
+        </div>
+
+        <div class="card-footer bg-white border-top-0">
+          <button class="btn btn-primary w-100" (click)="addToCart(cake, $event)">
+            Ajouter au panier
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

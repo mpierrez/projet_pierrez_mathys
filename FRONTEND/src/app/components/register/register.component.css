@@ -1,0 +1,36 @@
+small{
+  color: red;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+input {
+  width: 470px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.firstNameAndLastName {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+#firstname {
+  width: 200px;
+}
+
+#lastname {
+  width: 250px;
+}

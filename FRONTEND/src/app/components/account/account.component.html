@@ -1,0 +1,57 @@
+<app-header/>
+
+<div *ngIf="showSuccessMessage" class="alert alert-success" role="alert">
+  Vos informations ont été sauvegardées !
+</div>
+
+<div *ngIf="errorMessage != ''" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>Erreur!</strong> {{ errorMessage }}
+  <button type="button" class="btn-close" aria-label="Close" (click)="errorMessage = ''"></button>
+</div>
+
+<div class="card mt-4">
+  <div class="card-header">
+    <h5 class="card-title">Vos informations</h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="firstname"><strong>Prénom </strong><app-required/></label>
+        <input id="firstname" formControlName="firstnameControl" class="form-control"/>
+        <small>{{ getErrors('firstnameControl') }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="lastname"><strong>Nom de famille </strong><app-required/></label>
+        <input id="lastname" formControlName="lastnameControl" class="form-control"/>
+        <small>{{ getErrors('lastnameControl') }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="email"><strong>Adresse mail </strong><app-required/></label>
+        <input id="email" formControlName="emailControl" class="form-control"/>
+        <small>{{ getErrors('emailControl') }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="login"><strong>Login </strong><app-required/></label>
+        <input id="login" formControlName="loginControl" class="form-control"/>
+        <small>{{ getErrors('loginControl') }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="password"><strong>Mot de passe </strong><app-required/></label>
+        <input id="password" formControlName="passwordControl" class="form-control" type="password"/>
+        <small>{{ getErrors('passwordControl') }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword"><strong>Confirmer le mot de passe </strong><app-required/></label>
+        <input id="confirmPassword" formControlName="confirmPasswordControl" class="form-control" type="password"/>
+        <small>{{ getErrors('confirmPasswordControl') }}</small>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Sauvegarder</button>
+    </form>
+    <button class="btn btn-danger mt-3" (click)="onDisconnect()">Se déconnecter</button>
+  </div>
+</div>

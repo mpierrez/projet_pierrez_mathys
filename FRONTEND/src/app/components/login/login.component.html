@@ -1,0 +1,29 @@
+
+<div class="container">
+  <img src="../../../assets/Caakle.png" width="250px" alt="Logo" class="logo">
+
+  <h2>Connectez-vous</h2>
+
+  <div *ngIf="errorMessage != ''" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Erreur!</strong> {{ errorMessage}}
+    <button type="button" class="btn-close" aria-label="Close" (click)="errorMessage = ''"></button>
+  </div>
+
+  <form [formGroup]="loginUserForm" (submit)="submitForm()">
+    <div class="mb-3">
+      <label for="login" class="form-label">Login <app-required/></label>
+      <input class="form-control" formControlName="loginControl" type="text" id="login" name="login" placeholder="Entrez le login du compte" required>
+      <small>{{ getErrors('loginControl') }}</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe <app-required/></label>
+        <input class="form-control" formControlName="passwordControl" type="password" id="password" name="password" placeholder="Entrez le mot de passe du compte" required>
+        <small>{{ getErrors('passwordControl') }}</small>
+    </div>
+
+    <a routerLink="/register" class="btn btn-link">Pas encore de compte ? Inscrivez-vous !</a>
+
+    <button type="submit" class="btn btn-primary">Valider</button>
+  </form>
+</div>

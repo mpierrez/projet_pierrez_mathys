@@ -1,0 +1,12 @@
+<header class="store-header">
+  <div class="header-left">
+    <img src="../assets/Caakle.png" alt="Caakle Logo" class="logo">
+  </div>
+  <nav class="header-nav">
+    <a routerLink="/catalogue" class="nav-link">Voir le catalogue</a>
+    <a routerLink="/panier" class="nav-link">
+      Mon panier <span class="cart-count">({{ (nb$ | async)}})</span>
+    </a>
+    <a routerLink="/account" class="nav-link">Mon compte</a>
+  </nav>
+</header>
