@@ -1,107 +1,104 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../../services/api.service';
-import { Client } from '../../../models/client';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Client } from '../../shared/models/client';
 import { Router, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RequiredComponent } from '../../shared/components/required/required.component';
+import { HeaderComponent } from '../../shared/components/header/header.component';
+import { ApiService } from '../../core/services/api.service';
+import { UtilsService } from '../../core/services/utils.service';
+import { CreditCardModule } from '../../modules/credit-card-module/credit-card.module';
+import { SharedModule } from '../../modules/shared/shared.module';
+import { MessageModule } from '../../modules/message/message.module';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { RequiredComponent } from '../required/required.component';
-import { HeaderComponent } from '../header/header.component';
-import { validateTitleControl, getControlName } from '../../app.utils';
 
 @Component({
-  selector: 'app-account',
-  imports: [HeaderComponent, ReactiveFormsModule, CommonModule, RouterModule, RequiredComponent],
-  standalone: true,
-  providers: [ApiService],
-  templateUrl: './account.component.html',
-  styleUrl: './account.component.css'
+    selector: 'app-account',
+    imports: [CommonModule, CreditCardModule, HeaderComponent, RouterModule, RequiredComponent, SharedModule, MessageModule],
+    providers: [ApiService],
+    templateUrl: './account.component.html',
+    styleUrl: './account.component.css'
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
   user$: Observable<Client>;
   userForm : FormGroup;
-  errorMessage: string = '';
   alreadySubmitted: boolean = false;
-  showSuccessMessage: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
+  isLoading: boolean = true;
+  private subscriptions: Subscription = new Subscription();
 
-  constructor(private fb : FormBuilder, private apiService: ApiService, private router: Router) {}
+  constructor(private fb : FormBuilder, private apiService: ApiService, private utilsService: UtilsService, private router: Router) {}
 
   ngOnInit(): void {
-    // si l'utilisateur ne s'est pas encore connecté, on le redirige vers la page de login
-    if (localStorage.getItem('token') === null) {
-      localStorage.setItem('errorMessage', 'Vous devez être connecté pour accéder à cette page');
-      this.router.navigate(['/login']);
-    }
-
-    this.userForm = this.fb.group({
-      firstnameControl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
-      lastnameControl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
-      emailControl: ['', [Validators.required, Validators.email]],
-      loginControl: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
-      passwordControl: ['', [Validators.required]],
-      confirmPasswordControl: ['', [Validators.required, this.passwordMatchValidator.bind(this)]]
+    this.user$ = this.apiService.getUser();
+    const userSubscription = this.user$.subscribe({
+      next: (user) => {
+        this.userForm = this.fb.group({
+          firstnameControl: [user.firstname, [Validators.required, Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
+          lastnameControl: [user.lastname, [Validators.required, Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
+          emailControl: [user.email, [Validators.required, Validators.email]],
+          loginControl: [user.login, [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
+          passwordControl: [user.password, [Validators.required]],
+          confirmPasswordControl: [user.password, [Validators.required]]
+        },
+        {
+          validators: this.utilsService.passwordMatchValidator
+        });
+        this.isLoading = false;
+      },
+      error: () => {
+        localStorage.setItem('errorMessage', 'Vous devez être connecté pour accéder à cette page.');
+        this.router.navigate(['/login']);
+      },
     });
-
-    this.user$ = this.apiService.getCurrentUserInfos();
-    this.user$.subscribe(user => {
-      this.userForm.patchValue({
-        firstnameControl: user.firstname,
-        lastnameControl: user.lastname,
-        emailControl: user.email,
-        loginControl: user.login,
-        passwordControl: user.password,
-        confirmPasswordControl: user.password
-      });
-    });
+    this.subscriptions.add(userSubscription);
   }
 
-  private passwordMatchValidator(control: FormControl): ValidationErrors | null {
-      const password = this.userForm?.get('passwordControl')?.value;
-      const confirmPassword = control.value;
-      return password === confirmPassword ? null : { passwordsMismatch: true };
-    }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
-  protected getErrors(name: string) : string {
-    return validateTitleControl(getControlName(this.userForm, name), this.alreadySubmitted);
-  };
-
-  onSubmit() {
-    this.errorMessage = '';
+  onSubmit(): void {
     this.alreadySubmitted = true;
-    const { firstnameControl, lastnameControl, emailControl, loginControl, passwordControl, confirmPasswordControl } = this.userForm.value;
 
-    if(passwordControl != confirmPasswordControl) {
-      this.errorMessage = 'Les mots de passe ne correspondent pas';
+    if(this.userForm.value.passwordControl !== this.userForm.value.confirmPasswordControl) {
+      this.successMessage = '';
+      this.errorMessage = 'Les mots de passe ne correspondent pas.';
       return;
     }
 
     if (!this.userForm.valid) {
+      this.successMessage = '';
       this.errorMessage = 'Veuillez remplir correctement tous les champs.';
       return;
     }
 
     const user = {
-      firstname: firstnameControl,
-      lastname: lastnameControl,
-      email: emailControl,
-      login: loginControl,
-      password: passwordControl,
+      id: 0,
+      firstname: this.userForm.value.firstnameControl,
+      lastname: this.userForm.value.lastnameControl,
+      email: this.userForm.value.emailControl,
+      login: this.userForm.value.loginControl,
+      password: this.userForm.value.passwordControl
     }
 
-    this.apiService.updateUserInfos(user).subscribe(
-      (res) => {
-        this.showSuccessMessage = true;
+    const userSubscription = this.apiService.updateUser(user).subscribe({
+      next: () => {
+        this.successMessage = 'Vos informations ont bien été mises à jour.';
+        this.errorMessage = '';
       },
-      (err) => {
-        this.errorMessage = err.error;
-        console.error(err);
+      error: (error) => {
+        this.successMessage = '';
+        this.errorMessage = error.error.message ? error.error.message : 'Une erreur est survenue lors de la mise à jour de vos informations.';
       }
-    );
+    });
+
+    this.subscriptions.add(userSubscription);
   }
 
-  onDisconnect() {
+  onDisconnect(): void {
     if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-      localStorage.removeItem('token');
       this.router.navigate(['/login']);
     }
   }

@@ -1,0 +1,14 @@
+<app-header/>
+
+<div class="container">
+  <div class="resume">
+    <h1>Résumé de votre panier</h1>
+    <app-cake-payment-line [cakes$]="cakes$" [resumePanier]="true"/>
+    <app-panier-total [resumePanier]="true"/>
+  </div>
+  <div class="separator"></div>
+  <div>
+    <app-credit-card-viewer/>
+    <app-form-card/>
+  </div>
+</div>

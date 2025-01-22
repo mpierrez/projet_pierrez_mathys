@@ -1,0 +1,4 @@
+<div *ngIf="message != ''" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>Erreur!</strong> {{ message }}
+  <button type="button" class="btn-close" aria-label="Close" (click)="message = ''"></button>
+</div>

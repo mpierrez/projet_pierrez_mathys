@@ -27,7 +27,8 @@ module.exports = {
       }
         );
         // Add the payload to the request so controllers may access it.
-        req.token = jwtPayload;
+        req.payload = jwtPayload;
+        req.user = jwtPayload.payload;
     } catch (error) {
        console.log (error);
         res.status(401).type('json').send(JSON.stringify({ message: 'Invalid token' }));

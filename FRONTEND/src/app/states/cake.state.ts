@@ -1,9 +1,9 @@
-import { Action, Select, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { CakeStateModel } from './cake-state-model';
-import { AddCake, RemoveCake, RemoveCakesOfType } from '../actions/cake.action';
+import { AddCake, RemoveCake, RemoveCakesOfType } from './actions/cake.action';
 import { v4 as uuidv4 } from 'uuid';
-import { Cake } from '../../models/cake';
+import { Cake } from '../shared/models/cake';
 
 @State<CakeStateModel>({
   name: 'cakes',

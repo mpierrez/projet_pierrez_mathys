@@ -1,37 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, WritableSignal } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { CommonModule } from '@angular/common';
-import { NumberFormatPipe } from '../../pipes/number-format.pipe';
-import { AddCake } from '../../actions/cake.action';
-import { Router } from '@angular/router';
-import { ApiService } from '../../../services/api.service';
-import { Cake } from '../../../models/cake';
-import { HeaderComponent } from '../header/header.component';
-import { Client } from '../../../models/client';
+import { AddCake } from '../../states/actions/cake.action';
+import { Cake } from '../../shared/models/cake';
+import { HeaderComponent } from '../../shared/components/header/header.component';
+import { NumberFormatPipe } from '../../shared/pipes/formatters/number-format.pipe';
+import { CakeService } from '../../core/services/cake.service';
+import { SearchEngineComponent } from './search-engine/search-engine.component';
 
 @Component({
     selector: 'app-catalogue',
-    imports: [CommonModule, NumberFormatPipe, HeaderComponent],
-    providers: [ApiService],
+    imports: [CommonModule, NumberFormatPipe, HeaderComponent, SearchEngineComponent],
     templateUrl: './catalogue.component.html',
     styleUrl: './catalogue.component.css',
 })
 
-export class CatalogueComponent implements OnInit {
-  cakes$: Observable<Cake[]>;
-  user$: Observable<Client>;
+export class CatalogueComponent  {
+  valCakes: WritableSignal<Cake[]>;
 
-  constructor(private store: Store, private apiService: ApiService, private router: Router) {}
-
-  ngOnInit() {
-    // si l'utilisateur ne s'est pas encore connecté, on le redirige vers la page de login
-    if(localStorage.getItem('token') === null) {
-      localStorage.setItem('errorMessage', 'Vous devez être connecté pour accéder à cette page');
-      this.router.navigate(['/login']);
-    }
-    this.cakes$ = this.apiService.getCakes();
-    this.user$ = this.apiService.getCurrentUserInfos();
+  constructor(private store: Store, private cakeService: CakeService) {
+    this.valCakes = this.cakeService.valCakes;
   }
 
   addToCart(cake: Cake, event: Event) {

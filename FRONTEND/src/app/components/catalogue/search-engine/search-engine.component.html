@@ -1,0 +1,38 @@
+<div class="search-engine">
+    <div class="search-name">
+        <span class="input-group-text">
+            <a style="text-decoration: none; color: inherit;">
+                <i class="fa fa-search"></i>
+            </a>
+        </span>
+        <input type="text" [(ngModel)]="searchName" class="form-control rounded" placeholder="Entrez le nom du gâteau que vous souhaitez chercher..." (input)="searchCakes()">
+    </div>
+
+    <div class="search-type">
+      <select class="custom-select" [(ngModel)]="searchType" (change)="searchCakes()">
+        <option value="undefined" disabled selected>Choisissez une catégorie...</option>
+        <option value="all">Tous les gâteaux</option>
+        <option *ngFor="let type of cakeTypes$ | async" [ngValue]="type">{{ type.name }}</option>
+      </select>
+    </div>
+
+    <div class="search-size">
+        <p>Poids du gâteau entre</p>
+        <input type="number" [(ngModel)]="searchMinWeight" class="form-control" placeholder="0" (input)="searchCakes()">
+
+        <p>et</p>
+        <input type="number" [(ngModel)]="searchMaxWeight" class="form-control" placeholder="300" (input)="searchCakes()">
+
+        <p>g</p>
+    </div>
+
+    <div class="search-price">
+        <p>Prix du gâteau entre</p>
+        <input type="number" [(ngModel)]="searchMinPrice" class="form-control" placeholder="0" (input)="searchCakes()">
+
+        <p>et</p>
+        <input type="number" [(ngModel)]="searchMaxPrice" class="form-control" placeholder="30" (input)="searchCakes()">
+
+        <p>€</p>
+    </div>
+</div>

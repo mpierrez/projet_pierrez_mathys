@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="card" [class.active]="this.cardService.valIsFlipped()">
+        <div class="card-side front">
+            <div class="card-focus"></div>
+            <div class="card-cover">
+                <img [src]="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/5.jpeg'" class="card-bg" />
+            </div>
+
+            <div class="card-container">
+                <div class="card-top">
+                <img src="assets/chip.png" class="card-chip">
+                <div class="card-type">
+                    <img [src]="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + cardService.valCardInfos().type + '.png'" *ngIf="cardService.valCardInfos().type" alt="" class="card-typeImg">
+                </div>
+                </div>
+
+                <label class="card-number">
+                  <div class="card-numberItem">{{ cardService.valCardInfos().number | maskCreditCard }}</div>
+                </label>
+
+                <div class="card-content">
+                <label class="card-info">
+                    <div class="card-holder">Titulaire</div>
+                    <div class="card-name">{{ cardService.valCardInfos().holderName | formatCardHolderName }}</div>
+                </label>
+
+                <div class="card-date">
+                    <label class="card-dateTitle">Expire le</label>
+                      <label class="card-dateItem">
+                        {{ cardService.valCardInfos().expirationDate | formatCardMonth }}/
+                      </label>
+                      <label class="card-dateItem">
+                        {{ cardService.valCardInfos().expirationDate | formatCardYear }}
+                      </label>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-side back">
+        <div class="card-cover">
+            <img [src]="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/5.jpeg'" class="card-bg">
+        </div>
+        <div class="card-band"></div>
+        <div class="card-cvv">
+            <div class="card-cvvTitle">CCV</div>
+                <div class="card-cvvBand">{{ cardService.valCardInfos().cvv | maskCVV }}</div>
+            <div class="card-type">
+            <img [src]="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + cardService.valCardInfos().type + '.png'" *ngIf="cardService.valCardInfos().type" class="card-typeImg">
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

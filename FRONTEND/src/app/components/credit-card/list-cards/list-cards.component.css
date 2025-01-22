@@ -1,0 +1,27 @@
+small {
+  color: red;
+}
+
+.cardExpirationDate div {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.cardMonth {
+  width: 65px;
+}
+
+.cardYear {
+  width: 80px;
+}
+
+td .cardActions, td .cardExpirationDate {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+p {
+  margin-top: 1rem;
+}

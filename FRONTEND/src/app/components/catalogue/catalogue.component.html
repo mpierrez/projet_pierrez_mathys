@@ -1,12 +1,12 @@
 <app-header/>
 
-<div class="store-title">
-  <h1>Bienvenue <span>{{ (user$ | async)?.firstname }} {{ (user$ | async)?.lastname }}</span> sur Caakle</h1>
-</div>
+<h2>Catalogue des gâteaux</h2>
+
+<app-search-engine/>
 
 <div class="product-list container">
-  <div class="row g-4">
-    <div class="col-md-4 col-sm-6" *ngFor="let cake of cakes$ | async">
+  <div class="row g-4" *ngIf="valCakes().length > 0; else noCakes">
+    <div class="col-md-4 col-sm-6" *ngFor="let cake of valCakes()">
       <div class="card h-100 shadow-sm">
         <img
           [src]="cake.imageUrl"
@@ -35,4 +35,10 @@
       </div>
     </div>
   </div>
+  <ng-template #noCakes>
+    <div class="alert alert-warning" role="alert">
+      Aucun gâteau disponible selon les filtres.
+    </div>
+  </ng-template>
 </div>
+

@@ -1,0 +1,96 @@
+<app-success-message [message]="successMessage"/>
+
+<app-error-message [message]="errorMessage"/>
+
+@if (isLoading) {
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+} @else if (hasAtLeastOneCard) {
+  <div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th class="cardNumber">Numéro de carte</th>
+          <th class="cardHolderName">Titulaire</th>
+          <th class="cardExpirationDate">Date d'expiration</th>
+          <th class="cardCvv">CCV</th>
+          <th class="cardActions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let card of cards$ | async">
+          <td>
+            <ng-container *ngIf="valCreditCard().id !== card.id; else editCardNumber">
+              <p>{{ card.number | maskCreditCard }}</p>
+            </ng-container>
+            <ng-template #editCardNumber>
+              <form [formGroup]="editCardForm">
+                <input formControlName="cardNumberControl" class="form-control cardNumber" [appMaxLengthNumber]="16" appOnlyNumbers/>
+                <small>{{ editCardForm | getErrors: 'cardNumberControl': alreadySubmitted }}</small>
+              </form>
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="valCreditCard().id !== card.id; else editCardHolderName">
+              <p>{{ card.holderName }}</p>
+            </ng-container>
+            <ng-template #editCardHolderName>
+              <form [formGroup]="editCardForm">
+                <input formControlName="cardHolderNameControl" class="form-control cardHolderName" />
+                <small>{{ editCardForm | getErrors: 'cardHolderNameControl': alreadySubmitted }}</small>
+              </form>
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="valCreditCard().id !== card.id; else editExpiration">
+              <p>{{ card.expirationDate | formatCardMonth }}/{{ card.expirationDate | formatCardYear }}</p>
+            </ng-container>
+            <ng-template #editExpiration>
+              <form [formGroup]="editCardForm" class="expirationDate">
+                <div class="cardExpirationDate">
+                  <select class="custom-select cardMonth" formControlName="cardMonthControl">
+                    <option disabled selected>Month</option>
+                    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+                  </select>
+
+                  <select class="custom-select cardYear" formControlName="cardYearControl">
+                    <option disabled selected>Year</option>
+                    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                  </select>
+                </div>
+              </form>
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="valCreditCard().id !== card.id; else editCardCvv">
+              <p>{{ card.cvv }}</p>
+            </ng-container>
+            <ng-template #editCardCvv>
+              <form [formGroup]="editCardForm">
+                <input formControlName="cardCvvControl" class="form-control cardCvv" [appMaxLengthNumber]="3" appOnlyNumbers/>
+                <small>{{ editCardForm | getErrors: 'cardCvvControl': alreadySubmitted }}</small>
+              </form>
+            </ng-template>
+          </td>
+          <td class="actions">
+            <ng-container *ngIf="valCreditCard().id == card.id; else actionButtons">
+              <div class="cardActions">
+                <button (click)="updateCard(card.id, card)" class="btn btn-success">Save</button>
+                <button (click)="cancelEdit()" class="btn btn-secondary">Cancel</button>
+              </div>
+            </ng-container>
+            <ng-template #actionButtons>
+              <div class="cardActions">
+                <button (click)="editCard(card)" class="btn btn-primary">Edit</button>
+                <button (click)="deleteCard(card.id)" class="btn btn-danger">Delete</button>
+              </div>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+} @else {
+  <p class="text-muted">Vous n'avez aucune carte.</p>
+}

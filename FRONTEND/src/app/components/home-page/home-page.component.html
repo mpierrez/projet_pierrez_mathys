@@ -1,0 +1,71 @@
+<app-header/>
+
+<div class="store-title">
+  <h1>Bienvenue <span>{{ (user$ | async)?.firstname }} {{ (user$ | async)?.lastname }}</span> sur Caakle</h1>
+</div>
+
+<main>
+  <section id="about">
+    <h2>Un univers de douceurs à découvrir</h2>
+    <p>
+      Bienvenue chez <strong>Caakle</strong>, le paradis des étudiants gourmands.
+      Chaque bouchée est une pause bien méritée, faite avec des ingrédients frais et des recettes artisanales,
+      comme un commit bien fait après une longue journée de travail.
+    </p>
+    <div class="about-grid">
+        <div class="about-item">
+            <img src="https://images.unsplash.com/photo-1587306433556-18d035a3ed97?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Gâteau aux fruits">
+            <h3>Gâteaux aux fruits</h3>
+            <p>
+                Légers et frais, parfaits pour reprendre des forces après une longue session de révisions.
+                Simple mais efficace, comme un code qui compile du premier coup.
+            </p>
+        </div>
+        <div class="about-item">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyDRuMxLUUyNkbDfMOxqFjQzwOLI8hUsC5E5a5NVIqSPeDWONt6UouQyBuZuWbMqlfUy3sMJsrMMcQ8DEeNVbJYDhiew-JoN3_LbCa27ahv0W9v9LLb8kHFyoX7PvaRRsSTBRyR9dCUbs/w1200-h630-p-k-no-nu/the_cake_is_a_lie_portal.jpg" alt="Gâteau au chocolat">
+            <h3>Gâteaux au chocolat</h3>
+            <p>
+                Un classique qui ne déçoit jamais. Idéal après une journée à résoudre des bugs ou gérer des conflits de merge.
+                Parfait pour redonner de l'énergie.
+            </p>
+        </div>
+        <div class="about-item">
+            <img src="https://resize-elle.ladmedia.fr/rcrop/638,,forcex/img/var/plain_site/storage/images/elle-a-table/les-dossiers-de-la-redaction/dossier-de-la-redac/20-gateaux-anglo-americains-a-croquer/20573672-12-fre-FR/27-gateaux-anglo-americains-a-croquer.jpg" alt="Gâteau traditionnel">
+            <h3>Gâteaux du monde</h3>
+            <p>
+                Des recettes simples et efficaces, comme un algorithme bien optimisé.
+                Le réconfort parfait après une journée de code… ou de recherche de bugs.
+            </p>
+        </div>
+    </div>
+    <button routerLink="/catalogue">Explorez nos créations</button>
+  </section>
+
+  <section id="testimonials">
+    <h2>Ce que disent nos clients</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial-item">
+            <p>
+              "J'ai accidentellement push mon <code>node_modules</code> sur le repo du TP...
+              J'ai donc dû ramener un gâteau au chocolat pour la prochaine séance.
+              Heureusement, je l'ai commandé ici, et tout le monde était ravi (même le prof) !"
+          </p>
+            <h4>- Yoann GRIM</h4>
+        </div>
+        <div class="testimonial-item">
+            <p>
+              "J'avais commandé un gâteau à la fraise pistaje, pensant que ça allait passer. Mauvaise idée.
+              Je ne suis clairement pas fan de pistaje. Heureusement, leur service est top, et j'ai pu échanger contre un gâteau à la vanille qui était délicieux."
+            </p>
+            <h4>- Jeannot NAEGELY</h4>
+        </div>
+        <div class="testimonial-item">
+            <p>
+                "Après des heures à me battre avec une div refusant de s'aligner, j'ai craqué pour leur gâteau au chocolat.
+                Fun fact : le gâteau était, lui, parfaitement aligné et tout aussi parfait."
+            </p>
+            <h4>- Danaé ALBRECH--MARTIN</h4>
+        </div>
+    </div>
+</section>
+</main>

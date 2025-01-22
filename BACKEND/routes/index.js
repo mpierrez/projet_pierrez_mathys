@@ -1,4 +1,6 @@
 module.exports = app => {  
-  require("./catalogue.routes")(app);
-  require("./utilisateur.routes")(app);
+  require("./cake.routes")(app);
+  require("./cakeType.routes")(app);
+  require("./user.routes")(app);
+  require("./card.routes")(app);
 }

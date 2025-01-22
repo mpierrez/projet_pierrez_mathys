@@ -1,4 +1,4 @@
-import { Cake } from "../../models/cake";
+import { Cake } from "../shared/models/cake";
 
 export class CakeStateModel {
   availableCakes: Cake[]; // tous les gâteaux disponibles (pour la liste des produits)

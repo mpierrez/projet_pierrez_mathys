@@ -1,0 +1,51 @@
+small {
+  color: red;
+}
+
+.wrapper {
+  min-height: 50vh;
+  display: flex;
+  padding: 50px 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+div {
+  width: 450px;
+}
+
+.expiration-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.expiration-date-inner {
+  width: 100%;
+}
+
+.expiration-date-inner, .expiration-date-errors {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.expiration-date-errors div {
+  width: 180px;
+}
+
+.saveCard {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}
+
+.saveCard label {
+  margin: 0;
+}

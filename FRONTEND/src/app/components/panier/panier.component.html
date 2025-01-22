@@ -1,51 +1,14 @@
-<app-header/>
+<app-header *ngIf="!resumePanier"/>
+
+<app-error-message [message]="errorMessage"/>
 
 <div class="title">
-  <h1>Votre panier</h1>
+  <h1>{{ resumePanier ? "Résumé de votre panier" : "Votre panier"}}</h1>
 </div>
 
 <div class="container">
-  <p *ngIf="($cakes | async)?.length === 0">Votre panier est vide</p>
-  <section id="cart" *ngFor="let cake of (getUniqueCakes($cakes) | async)">
-    <article class="product">
-      <header>
-        <a class="remove" (click)="removeAllCakes(cake)">
-          <img [src]="cake.imageUrl" alt="Image de {{ cake.name }}">
-          <h3>Tout retirer</h3>
-        </a>
-      </header>
-      <div class="content">
-        <h1>{{ cake.name }}</h1>
-        <p>{{ cake.description }}</p>
-      </div>
-      <footer class="content">
-        <span class="qt-minus" (click)="removeCake(cake)">-</span>
-        <span class="qt">{{ (getQuantity(cake) | async) ?? 0 }}</span>
-        <span class="qt-plus" (click)="addCake(cake)">+</span>
-        <h2 class="full-price">
-          Total : {{ (getTotalPriceOfACake(cake) | async) ?? 0 | numberFormat }}€
-        </h2>
-
-        <h2 class="price">
-          Prix unitaire : {{ cake.price | numberFormat }}€
-        </h2>
-      </footer>
-    </article>
-  </section>
+  <p *ngIf="(cakes$ | async)?.length === 0">Votre panier est vide</p>
+  <app-cake-payment-line [cakes$]="cakes$"/>
 </div>
 
-<footer id="site-footer">
-  <div class="container clearfix">
-
-    <div class="left">
-      <h2 class="subtotal">Sous-total: <span>{{ (getSubTotal() | async) ?? 0 | numberFormat }}</span>€</h2>
-      <h3 class="tax">TVA (20%): <span>{{ (getTva() | async) ?? 0 | numberFormat }}</span>€</h3>
-    </div>
-
-    <div class="right">
-      <h1 class="total">Total: <span>{{ (getTotalPrice() | async) ?? 0 | numberFormat}}</span>€</h1>
-      <a class="btn">Payer</a>
-    </div>
-
-  </div>
-</footer>
+<app-panier-total [resumePanier]="resumePanier"/>

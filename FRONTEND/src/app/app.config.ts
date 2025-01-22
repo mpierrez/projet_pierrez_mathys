@@ -9,7 +9,7 @@ import { routes } from './app.routes';
 import { provideRouter } from '@angular/router';
 import { NgxsModule } from '@ngxs/store';
 import { CakeState } from './states/cake.state';
-import { ApiHttpInterceptor } from '../services/http-interceptor';
+import { ApiHttpInterceptor } from './core/interceptors/http-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

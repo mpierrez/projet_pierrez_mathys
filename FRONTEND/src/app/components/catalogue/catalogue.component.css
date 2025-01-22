@@ -32,24 +32,11 @@ button {
   background-color: #0056b3;
 }
 
-.store-title {
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
-
-.store-title h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  letter-spacing: 1.5px;
-  margin: 0;
-}
-
 h2 {
   display: flex;
-  margin: 0;
+  margin-top: 40px;
   height: 50px;
+  justify-content: center;
   align-items: center;
 }
 
@@ -59,6 +46,8 @@ img {
   width: auto;
 }
 
-span {
-  color: #0056b3;
+app-search-engine {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
 }

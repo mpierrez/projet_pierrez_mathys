@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  max-width: fit-content;
+}
+
+.resume {
+  margin-top: 40px;
+  border-right: 2px solid #ccc;
+}
+
+.resume, .list {
+  flex: 1;
+}

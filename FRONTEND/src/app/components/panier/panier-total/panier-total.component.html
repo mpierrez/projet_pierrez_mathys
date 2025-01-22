@@ -1,0 +1,12 @@
+<footer id="site-footer">
+  <div class="container clearfix">
+    <div class="left">
+      <h2 class="subtotal">Sous-total: <span>{{ (getSubTotal() | async) ?? 0 | numberFormat }}</span>€</h2>
+      <h3 class="tax">TVA (20%): <span>{{ (getTva() | async) ?? 0 | numberFormat }}</span>€</h3>
+    </div>
+    <div class="right">
+      <h1 class="total">Total: <span>{{ (getTotalPrice() | async) ?? 0 | numberFormat}}</span>€</h1>
+      <button class="btn" [disabled]="isCartEmpty()" *ngIf="!resumePanier" (click)="onCartValidation()">Payer</button>
+    </div>
+  </div>
+</footer>

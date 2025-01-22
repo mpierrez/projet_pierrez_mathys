@@ -1,0 +1,35 @@
+.search-engine {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-name {
+    display: flex;
+    flex-direction: row;
+}
+
+.search-name, .search-type {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.search-size, .search-price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-size input, .search-price input {
+    height: 30px;
+    width: 70px;
+    margin-right: 10px;
+}
+
+p {
+    margin-right: 10px;
+    margin-bottom: 0;
+}

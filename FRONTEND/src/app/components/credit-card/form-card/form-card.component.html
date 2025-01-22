@@ -1,0 +1,59 @@
+<app-error-message [message]="errorMessage"/>
+
+<div class="search-type">
+  <select class="custom-select" (change)="selectCard()">
+    <option value="undefined" disabled selected>Choisissez une carte...</option>
+    <option *ngFor="let card of cards$ | async" [value]="card.id">{{ card.number }} - {{ card.holderName }} - {{ card.expirationDate | date: 'MM/yyyy' }}</option>
+  </select>
+</div>
+
+<form [formGroup]="addCardForm" (submit)="onSubmit()">
+  <div>
+    <label for="cardNumber" class="form-label mt-3">Numéro de carte</label>
+    <input type="number" class="form-control" id="cardNumber" formControlName="cardNumberControl" [appMaxLengthNumber]="16" appOnlyNumbers (input)="updateCard()"/>
+    <small>{{ addCardForm | getErrors: 'cardNumberControl': alreadySubmitted }}</small>
+  </div>
+
+  <div>
+    <label for="cardHolderName" class="form-label">Titulaire</label>
+    <input type="text" class="form-control" id="cardHolderName" formControlName="cardHolderNameControl" (input)="updateCard()"
+    />
+    <small>{{ addCardForm | getErrors: 'cardHolderNameControl': alreadySubmitted }}</small>
+  </div>
+
+  <div class="expiration-date">
+    <label class="form-label">Date d'expiration</label>
+    <div class="expiration-date-inner">
+      <select class="custom-select" formControlName="cardMonthControl" (change)="updateCard()">
+        <option disabled selected>Mois</option>
+        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+      </select>
+
+      <select class="custom-select" formControlName="cardYearControl" (change)="updateCard()">
+        <option disabled selected>Année</option>
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="expiration-date-errors">
+    <div>
+      <small>{{ addCardForm | getErrors: 'cardMonthControl': alreadySubmitted }}</small>
+    </div>
+    <div>
+      <small>{{ addCardForm | getErrors: 'cardYearControl': alreadySubmitted }}</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="cardCvv" class="form-label">CCV</label>
+    <input type="number" class="form-control" id="cardCvv" [appMaxLengthNumber]="3" appOnlyNumbers min="100" max="999" formControlName="cardCvvControl" (focus)="flipCard()" (blur)="flipCard()" (input)="updateCard()"/>
+    <small>{{ addCardForm | getErrors: 'cardCvvControl': alreadySubmitted }}</small>
+  </div>
+
+  <div class="saveCard">
+    <input type="checkbox" id="checkbox" (change)="updateCard()" />
+    <label for="checkbox">Enregistrer cette carte</label>
+  </div>
+  <button type="submit" class="btn btn-primary mt-3">Payer</button>
+</form>
