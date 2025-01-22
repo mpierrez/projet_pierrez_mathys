@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { CardService } from '../../../core/services/card.service';
 import { ApiService } from '../../../core/services/api.service';
 import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { RemoveAllCakes } from '../../../states/actions/cake.action';
 
 @Component({
   selector: 'app-form-card',
@@ -21,7 +23,7 @@ export class FormCardComponent {
   alreadySubmitted: boolean = false;
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, public cardService: CardService, private apiService: ApiService, private router: Router) {}
+  constructor(private store: Store, private fb: FormBuilder, public cardService: CardService, private apiService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.cards$ = this.apiService.getCards();
@@ -59,7 +61,7 @@ export class FormCardComponent {
         },
       });
     }
-
+    this.store.dispatch(new RemoveAllCakes());
     this.router.navigate(['/home']);
   }
 

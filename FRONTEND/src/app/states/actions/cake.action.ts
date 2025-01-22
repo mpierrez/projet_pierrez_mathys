@@ -14,3 +14,7 @@ export class RemoveCakesOfType {
   static readonly type = '[Cake] RemoveOfType';
   constructor(public payload: Cake) {}
 }
+
+export class RemoveAllCakes {
+  static readonly type = '[Cake] RemoveAllCakes';
+}

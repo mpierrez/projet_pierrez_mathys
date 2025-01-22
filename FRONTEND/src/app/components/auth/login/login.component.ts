@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit{
         this.router.navigate(['/home']);
       },
       error: (error) => {
+        this.isLoading = false;
         this.successMessage = '';
         this.errorMessage = error.error ? error.error.message : 'Une erreur est survenue lors de la connexion.';
       },

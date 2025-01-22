@@ -1,7 +1,7 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { CakeStateModel } from './cake-state-model';
-import { AddCake, RemoveCake, RemoveCakesOfType } from './actions/cake.action';
+import { AddCake, RemoveAllCakes, RemoveCake, RemoveCakesOfType } from './actions/cake.action';
 import { v4 as uuidv4 } from 'uuid';
 import { Cake } from '../shared/models/cake';
 
@@ -79,6 +79,13 @@ export class CakeState {
     const state = getState();
     patchState({
       cakesInCart: state.cakesInCart.filter((a) => a.name !== payload.name),
+    });
+  }
+
+  @Action(RemoveAllCakes)
+  removeAll({ patchState }: StateContext<CakeStateModel>) {
+    patchState({
+      cakesInCart: [],
     });
   }
 }
