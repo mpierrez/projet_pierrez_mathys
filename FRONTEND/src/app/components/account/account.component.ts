@@ -39,8 +39,8 @@ export class AccountComponent implements OnInit, OnDestroy {
           lastnameControl: [user.lastname, [Validators.required, Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
           emailControl: [user.email, [Validators.required, Validators.email]],
           loginControl: [user.login, [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
-          passwordControl: [user.password, [Validators.required]],
-          confirmPasswordControl: [user.password, [Validators.required]]
+          passwordControl: ['', [Validators.required]],
+          confirmPasswordControl: ['', [Validators.required]]
         },
         {
           validators: this.utilsService.passwordMatchValidator

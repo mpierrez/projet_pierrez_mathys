@@ -46,9 +46,12 @@ export class LoginComponent implements OnInit{
     this.apiService.loginClient(loginControl, passwordControl).subscribe({
       next: () => {
         this.isLoading = false;
+        localStorage.removeItem('errorMessage');
+        localStorage.removeItem('successMessage');
         this.router.navigate(['/home']);
       },
       error: (error) => {
+        this.successMessage = '';
         this.errorMessage = error.error ? error.error.message : 'Une erreur est survenue lors de la connexion.';
       },
     });

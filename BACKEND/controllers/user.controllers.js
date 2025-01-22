@@ -1,13 +1,13 @@
 const { ACCESS_TOKEN_SECRET }  = require ("../config.js");
 
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const db = require("../models");
+const Users = db.users;
 
 function generateAccessToken(user) {
     return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: '1800s' });
 }
-
-const db = require("../models");
-const Users = db.users;
 
 exports.getAllUsers = (req, res) => {
   Users.findAll()
@@ -39,7 +39,12 @@ exports.login = (req, res) => {
   let pattern = /^[A-Za-z0-9]{1,20}$/;
   if (pattern.test(utilisateur.login) && pattern.test(utilisateur.password)) {
      Users.findOne({ where: { login: utilisateur.login } })
-    .then(data => {
+    .then(async data => {
+
+      if (!data || !await bcrypt.compare(utilisateur.password, data.password)) {
+        return res.status(401).send({ message: "Login ou mot de passe incorrect" });
+      }
+
       if (data) {
         const user = {
           id: data.id,
@@ -52,18 +57,18 @@ exports.login = (req, res) => {
         res.setHeader('Authorization', `Bearer ${accessToken}`);
         res.send(data);
       } else {
-        res.status(404).send("Login ou mot de passe incorrect");
+        res.status(404).send({ message: "Login ou mot de passe incorrect" });
       }
     })
     .catch(err => {
-      res.status(400).send("Login ou mot de passe incorrect");
+      res.status(400).send({ message: "Une erreur est survenue : " + err.message });
     });
   } else {
-    res.status(400).send("Login ou mot de passe incorrect");
+    res.status(400).send({ message: "Login ou mot de passe incorrect" });
   }
 };
 
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
   const user = {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -74,6 +79,13 @@ exports.register = (req, res) => {
 
   let pattern = /^[A-Za-z0-9]{1,20}$/;
   if (pattern.test(user.login) && pattern.test(user.password)) {
+
+    const existingUser = await Users.findOne({ where: { login: user.login } });
+    if (existingUser) {
+      return res.status(400).send({ message: "Login déjà utilisé" });
+    }
+
+    user.password = await bcrypt.hash(user.password, 10);
     Users.create(user)
     .then(data => {
       let accessToken = generateAccessToken(user);
@@ -87,7 +99,7 @@ exports.register = (req, res) => {
     });
   } else {
     res.status(400).send({
-      message: "Login ou mot de passe incorrect" 
+      message: "Le login et le mot de passe doivent être composés de lettres et de chiffres uniquement." 
     });
   }
 }
@@ -104,8 +116,11 @@ exports.getUserFromToken = (req, res) => {
   })
 };
 
-exports.updateUser = (req, res) => {
+exports.updateUser = async (req, res) => {
   const id = req.user.id;
+
+  req.body.password = await bcrypt.hash(req.body.password, 10);
+
   Users.update(req.body, {
     where: { id: id }
   })

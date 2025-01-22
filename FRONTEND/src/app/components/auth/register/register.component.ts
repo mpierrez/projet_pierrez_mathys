@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit{
   registerUserForm : FormGroup;
   alreadySubmitted: boolean = false;
   errorMessage: string = '';
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private utilsService: UtilsService, private router : Router) {}
 
@@ -49,6 +50,7 @@ export class RegisterComponent implements OnInit{
       return;
     }
 
+    this.isLoading = true;
     const client = {
       id: 0,
       firstname: this.registerUserForm.value.firstnameControl,
@@ -62,10 +64,12 @@ export class RegisterComponent implements OnInit{
       next: () => {
         localStorage.removeItem('errorMessage');
         localStorage.setItem('successMessage', 'Votre compte a bien été créé. Vous pouvez maintenant vous connecter.');
+        this.isLoading = false;
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        this.errorMessage = error.error ? error.error : 'Une erreur est survenue lors de la connexion.';
+        this.isLoading = false;
+        this.errorMessage = error.error.message ? error.error.message : 'Une erreur est survenue lors de la connexion.';
       },
     });
   }
